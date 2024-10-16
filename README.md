@@ -1,5 +1,5 @@
 # @djsk/v13
-Jishaku for discord.js v13\n
+Jishaku for discord.js v13<br>
 The original jishaku (discord.py) is [here](https://github.com/Gorialis/jishaku).
 
 ## Usage
