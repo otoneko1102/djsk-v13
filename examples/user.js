@@ -1,6 +1,6 @@
 const { Client } = require('discord.js-infer');
 const { selfToken } = require('./config');
-const { Jishaku } = require('../index');
+const { Jishaku } = require('@djsk/v13');
 
 // Create a new client instance
 const client = new Client();

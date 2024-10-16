@@ -1,6 +1,6 @@
 const { Client } = require('discord.js');
 const { token, intents } = require('./config');
-const { Jishaku } = require('../index');
+const { Jishaku } = require('@djsk/v13');
 
 // Create a new client instance
 // Important! Message Content Intent must be enabled to use djsk.
