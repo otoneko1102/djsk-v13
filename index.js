@@ -36,7 +36,7 @@ var __awaiter = (this && this.__awaiter) || function(thisArg, _arguments, P, gen
   });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.djsk = void 0;
+exports.Jishaku = void 0;
 
 const child_process = __importStar(require("child_process"));
 const os_1 = require("os");
@@ -55,7 +55,7 @@ class Logger {
     console.error([`discord.jsk: ${this.funcName} (ERROR)`], ...message);
   }
 }
-class djsk {
+class Jishaku {
   constructor(client, djskInitConfig) {
     this.client = client;
     this.prefix = djskInitConfig?.prefix || '.';
@@ -239,4 +239,4 @@ class djsk {
     });
   }
 }
-exports.djsk = djsk;
+exports.Jishaku = Jishaku;

@@ -6,7 +6,7 @@ interface djskConfig {
   useableUserId: Array<string>;
   allowMultiShRunning?: boolean;
 }
-export declare class djsk {
+export declare class Jishaku {
   client: Client;
   message: Message | undefined;
   djskInitConfig: djskConfig;

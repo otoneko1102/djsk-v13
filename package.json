@@ -2,7 +2,8 @@
   "name": "@djsk/v13",
   "version": "1.0.0",
   "description": "Jishaku for discord.js v13",
-  "main": "dist/index.js",
+  "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -16,8 +17,13 @@
   "keywords": [
     "discord",
     "discord.js",
+    "djs",
+    "d.js",
+    "djsk",
     "13",
     "v13",
+    "bot",
+    "user",
     "jishaku"
   ],
   "author": "otoneko.",
