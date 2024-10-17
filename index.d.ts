@@ -1,7 +1,6 @@
 import { Client, Message } from "discord.js";
 interface djskConfig {
   prefix?: string;
-  safemode?: boolean;
   consoleLog?: boolean;
   encoding: string;
   useableUserId: Array<string>;

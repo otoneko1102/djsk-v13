@@ -204,19 +204,23 @@ class Jishaku {
         
         try {
           const client = this.client;
-          const originalToken = this.client.ws.client.token;
           let result;
+          /*
+          const originalToken = this.client.ws.client.token;
+          
           if (this.djskInitConfig.safemode) {
             const require = undefined;
             const fs_1 = undefined;
             process.env = {};
-            client.ws.client.token = undefined;
             const originalToken = undefined;
-            result = yield eval(`(async () => { ${command} })()`);
+            result = yield eval(`(async () => { client.ws.client.token = undefined;${command} })()`);
           } else {
             result = yield eval(`(async () => { ${command} })()`);
           }
-          client.ws.client.token = originalToken;
+          */
+          result = yield eval(`(async () => { ${command} })()`);
+          console.log(typeof result)
+          result = typeof result === 'object' ? JSON.stringify(result) : String(result);
           if (this.djskInitConfig?.consoleLog) console.log(result);
 
           message.reply("```\n" + result + "\n```").catch((error) => {
