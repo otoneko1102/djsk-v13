@@ -41,6 +41,7 @@ exports.Jishaku = void 0;
 const child_process = __importStar(require("child_process"));
 const os_1 = require("os");
 const fs_1 = require("fs");
+const displus_1 = require("displus");
 const encoding = require("encoding-japanese");
 let isShRunning = false;
 class Logger {
@@ -86,11 +87,8 @@ class Jishaku {
             type: "string",
           });
         };
-        const patterns = [
-          /```(?:[^\n]+)?\n([\s\S]*?)\n```/g
-        ];
         const cmd = message.content.replace(`${this.prefix} sh `, "");
-        const command = patterns.reduce((acc, pattern) => acc.replace(pattern, '$1'), cmd);
+        const command = displus_1.rawCode(cmd);
         const spawnProcess = child_process.spawn("cmd", ["/c", command], {
           //@ts-ignore
           encoding: "Shift_JIS",
@@ -201,11 +199,8 @@ class Jishaku {
         }));
       } else if (message.content.startsWith(`${this.prefix}jsk js `)) {
         const logger = new Logger("javascript");
-        const patterns = [
-          /```(?:[^\n]+)?\n([\s\S]*?)\n```/g
-        ];
         const cmd = message.content.replace(`${this.prefix}jsk js `, "");
-        const command = patterns.reduce((acc, pattern) => acc.replace(pattern, '$1'), cmd);
+        const command = displus_1.rawCode(cmd);
         
         try {
           const client = this.client;
