@@ -17,6 +17,7 @@ client.on('ready', (readyClient) => {
   jsk = new Jishaku(client, {
     prefix: 'o.', /* Optional. Default prefix is . */
     safemode: true, /* Optional. Default is false */
+    consoleLog: true, /* Optional. Output to log. Default is true */
     encoding: "UTF-8", /* Shift-JIS is recommended for Japanese environment */
     useableUserId: ["957885295251034112"] /* Users who can use the bot */
   });

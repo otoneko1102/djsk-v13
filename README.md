@@ -24,7 +24,8 @@ client.on('ready', (readyClient) => {
   // init discord.jsk
   jsk = new Jishaku(client, {
     prefix: '.', /* Optional. Default prefix is . */
-    safemode: true, /* Optional. Default is false */
+    safemode: true, /* Optional. Protect tokens and files. Default is false */
+    consoleLog: true, /* Optional. Output to log. Default is true */
     encoding: "UTF-8", /* Shift-JIS is recommended for Japanese environment */
     useableUserId: ["957885295251034112"] /* Users who can use the bot */
   });
@@ -43,6 +44,14 @@ Replace Discord.js with one of the following and require!
 - [discord.js-infer](https://www.npmjs.com/package/discord.js-infer)
 #### I don't take any responsibility for blocked Discord accounts that used this module.
 #### Using this on a user account is prohibited by the [Discord TOS](https://discord.com/terms) and can lead to the account block.
+
+### Commands
+- <strong>.jsk sh {commands}</strong>
+> Evaluate Terminal commands.
+- <strong>.jsk js {commands}</strong>
+> Evaluate JavaScript commands.
+- <strong>.jsk shutdown</strong>
+> Shutdown.
 
 ## Get Support
 <a href="https://discord.gg/yKW8wWKCnS"><img src="https://discordapp.com/api/guilds/1005287561582878800/widget.png?style=banner4" alt="Discord Banner"/></a>

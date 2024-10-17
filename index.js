@@ -60,8 +60,9 @@ class Jishaku {
     this.client = client;
     this.prefix = djskInitConfig?.prefix || '.';
     this.djskInitConfig = djskInitConfig;
+    this.djskInitConfig.consoleLog = typeof djskInitConfig?.consoleLog === 'boolean' ? djskInitConfig.consoleLog : true;
     const logger = new Logger("init");
-    logger.info("=====discord.jsk=====\n", "Initialization of discord.jsk is complete!\n", "=====discord.jsk=====");
+    if (this.djskInitConfig?.consoleLog) logger.info("=====discord.jsk=====\n", "Initialization of discord.jsk is complete!\n", "=====discord.jsk=====");
   }
   async onMessageCreated(message) {
     return __awaiter(this, void 0, void 0, function*() {
@@ -85,7 +86,11 @@ class Jishaku {
             type: "string",
           });
         };
-        const command = message.content.replace(`${this.prefix} sh `, "");
+        const patterns = [
+          /```(?:[^\n]+)?\n([\s\S]*?)\n```/g
+        ];
+        const cmd = message.content.replace(`${this.prefix} sh `, "");
+        const command = patterns.reduce((acc, pattern) => acc.replace(pattern, '$1'), cmd);
         const spawnProcess = child_process.spawn("cmd", ["/c", command], {
           //@ts-ignore
           encoding: "Shift_JIS",
@@ -108,12 +113,12 @@ class Jishaku {
               // const file = readFileSync("src/config/latest-jsk-log.json");
               if (createdMessage) {
                 yield createdMessage.edit(`\n\`\`\`Command: ${command} \n\n${currentContent.length > 1900
-                ? currentContent.slice(currentContent.length - 1900)
-                : currentContent}\`\`\``);
+                  ? currentContent.slice(currentContent.length - 1900)
+                  : currentContent}\`\`\``);
               } else {
                 createdMessage = yield message.reply(`\n\`\`\`Command: ${command} \n\n${currentContent.length > 1900
-                ? currentContent.slice(currentContent.length - 1900)
-                : currentContent}\`\`\``);
+                  ? currentContent.slice(currentContent.length - 1900)
+                  : currentContent}\`\`\``);
               }
             } else {
               isMessageSended = true;
@@ -123,11 +128,11 @@ class Jishaku {
               // );
               // const file = readFileSync("src/config/latest-jsk-log.json");
               createdMessage = yield message.reply(`\n\`\`\`Command: ${command} \n\n${currentContent.length > 1900
-                                ? currentContent.slice(currentContent.length - 1900)
-                                : currentContent}\`\`\``);
+                ? currentContent.slice(currentContent.length - 1900)
+                : currentContent}\`\`\``);
             }
           } catch (error) {
-            logger.error("An error has occurred.", error);
+            if (this.djskInitConfig?.consoleLog) logger.error("An error has occurred.", error);
           }
         }), 2000);
         spawnProcess.on("close", () => __awaiter(this, void 0, void 0, function*() {
@@ -142,16 +147,16 @@ class Jishaku {
               try {
                 if (createdMessage) {
                   yield createdMessage.edit(`\n\`\`\`Command: ${command} \n\n${currentContent.length > 1900
-                                        ? currentContent.slice(currentContent.length - 1900)
-                                        : currentContent}\`\`\``);
+                    ? currentContent.slice(currentContent.length - 1900)
+                    : currentContent}\`\`\``);
                 } else {
                   console.log(currentContent.slice(currentContent.length - 1900).length, currentContent.length);
                   createdMessage = yield message.reply(`\n\`\`\`Command: ${command} \n\n${currentContent.length > 1900
-                                        ? currentContent.slice(currentContent.length - 1900)
-                                        : currentContent}\`\`\``);
+                    ? currentContent.slice(currentContent.length - 1900)
+                    : currentContent}\`\`\``);
                 }
               } catch (error) {
-                logger.error("An error has occurred.", error);
+                if (this.djskInitConfig?.consoleLog) logger.error("An error has occurred.", error);
               }
             } else {
               isMessageSended = true;
@@ -169,11 +174,11 @@ class Jishaku {
               //     : toString(currentContent) + "\n```"
               // );
               createdMessage = yield message.reply(`\n\`\`\`Command: ${command} \n\n${currentContent.length > 1900
-                                ? currentContent.slice(currentContent.length - 1900)
-                                : currentContent}\`\`\``);
+                ? currentContent.slice(currentContent.length - 1900)
+                : currentContent}\`\`\``);
             }
           } catch (error) {
-            logger.error("An error has occurred.", error);
+            if (this.djskInitConfig?.consoleLog) logger.error("An error has occurred.", error);
           }
           const tempLogMsgId = createdMessage.id;
           createdMessage.react("✅");
@@ -204,30 +209,26 @@ class Jishaku {
         
         try {
           const client = this.client;
-          if (
-            this.djskInitConfig?.safemode &&
-            command.includes('token')
-          ) {
-            const result = '[Anonymous tokens]';
-            message.reply("```\n" + result + "\n```").catch((error) => {
-              message.reply("```\n" + error + "\n```");
-            });
-            return;
+          const originalToken = this.client.ws.client.token;
+          let result;
+          if (this.djskInitConfig.safemode) {
+            const require = undefined;
+            const fs_1 = undefined;
+            process.env = {};
+            client.ws.client.token = undefined;
+            const originalToken = undefined;
+            result = yield eval(`(async () => { ${command} })()`);
+          } else {
+            result = yield eval(`(async () => { ${command} })()`);
           }
-          //let result = eval(command);
-          let result = yield eval(`(async () => { ${command} })()`);
-          console.log(result);
-
-          if (
-            this.djskInitConfig?.safemode &&
-            `${result}`.includes(`${client.ws.client.token}`)
-          ) result = '[Anonymous tokens]';
+          client.ws.client.token = originalToken;
+          if (this.djskInitConfig?.consoleLog) console.log(result);
 
           message.reply("```\n" + result + "\n```").catch((error) => {
             message.reply("```\n" + error + "\n```");
           });
         } catch (error) {
-          logger.error("An error has occurred.", error);
+          if (this.djskInitConfig?.consoleLog) logger.error("An error has occurred.", error);
           message.reply("```\n" + error + "\n```");
         }
       } else if (message.content.startsWith(`${this.prefix}jsk shutdown`)) {
