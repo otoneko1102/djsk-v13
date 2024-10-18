@@ -44,6 +44,10 @@ Replace Discord.js with one of the following and require!
 #### Using this on a user account is prohibited by the [Discord TOS](https://discord.com/terms) and can lead to the account block.
 
 ### Commands
+- <strong>.jsk help</strong>
+> Show help.
+- <strong>.jsk ping</strong>
+> Pong.
 - <strong>.jsk sh {commands}</strong>
 > Evaluate Terminal commands.
 - <strong>.jsk js {commands}</strong>

@@ -41,8 +41,11 @@ exports.Jishaku = void 0;
 const child_process = __importStar(require("child_process"));
 const os_1 = require("os");
 const fs_1 = require("fs");
+const path_1 = require("path");
+const axios_1 = require("axios");
 const displus_1 = require("displus");
 const encoding = require("encoding-japanese");
+const packageData = JSON.parse(fs_1.readFileSync(path_1.join(__dirname, "./package.json"), "utf-8"));
 let isShRunning = false;
 class Logger {
   constructor(funcName = "default") {
@@ -50,10 +53,10 @@ class Logger {
     this.funcName = funcName;
   }
   info(...message) {
-    console.info([`discord.jsk: ${this.funcName} (INFO)`], ...message);
+    console.info([`${packageData.name}: ${this.funcName} (INFO)`], ...message);
   }
   error(...message) {
-    console.error([`discord.jsk: ${this.funcName} (ERROR)`], ...message);
+    console.error([`${packageData.name}: ${this.funcName} (ERROR)`], ...message);
   }
 }
 class Jishaku {
@@ -63,7 +66,11 @@ class Jishaku {
     this.djskInitConfig = djskInitConfig;
     this.djskInitConfig.consoleLog = typeof djskInitConfig?.consoleLog === 'boolean' ? djskInitConfig.consoleLog : true;
     const logger = new Logger("init");
-    if (this.djskInitConfig?.consoleLog) logger.info("=====discord.jsk=====\n", "Initialization of discord.jsk is complete!\n", "=====discord.jsk=====");
+    if (this.djskInitConfig?.consoleLog) axios_1.get(`https://registry.npmjs.org/${packageData.name}`).then(npmResponse => {
+      const npmLatestVersion = npmResponse.data['dist-tags'].latest;
+      if (packageData.version !== npmLatestVersion) logger.info("=====package notice=====\n", `A new version is available!\n`, `Current version: ${packageData.version}\n`, `Latest version: ${npmLatestVersion}\n`, `Update: npm i ${packageData.name}@latest\n`, "=====package notice=====");
+    });
+    if (this.djskInitConfig?.consoleLog) logger.info(`=====${packageData.name}=====\n`, "Initialization of discord.jsk is complete!\n", `=====${packageData.name}=====\n`);
   }
   async onMessageCreated(message) {
     return __awaiter(this, void 0, void 0, function*() {
@@ -74,8 +81,33 @@ class Jishaku {
       let createdMessage = {};
       if (!this.djskInitConfig.useableUserId.includes(message.author.id))
         return;
-      if (!message.content.startsWith(`${this.prefix}jsk `))
+      if (!message.content?.startsWith(`${this.prefix}jsk `))
         return;
+      if (message.content.startsWith(`${this.prefix}jsk help`)) {
+        const content = `
+          \`\`\`
+          # Commands
+            - ${this.prefix}jsk help
+            > Show help.
+            - ${this.prefix}jsk ping
+            > Pong.
+            - ${this.prefix}jsk sh {commands}
+            > Evaluate Terminal commands.
+            - ${this.prefix}jsk js {commands}
+            > Evaluate JavaScript commands.
+            - ${this.prefix}jsk shutdown
+            > Shutdown.
+          \`\`\`
+        `;
+        try {
+          msssage.reply(content);
+        } catch {}
+      }
+      if (message.content.startsWith(`${this.prefix}jsk ping`)) {
+        try {
+          message.reply('```\nPong.\n```')
+        } catch {}
+      }
       if (message.content.startsWith(`${this.prefix}jsk sh `)) {
         if (isShRunning && !this.djskInitConfig.allowMultiShRunning) {
           message.reply("You are trying to run multiple sh processes, but cannot because the allowMultiShRunning option is disabled.\nAlso, use of the allowMultiShRunning option is deprecated.");

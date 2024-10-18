@@ -1,15 +1,12 @@
 {
   "name": "@djsk/v13",
-  "version": "3.0.0",
+  "version": "4.0.0-dev.0",
   "description": "Jishaku for discord.js v13",
   "main": "index.js",
   "types": "index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "files": [
-    "dist"
-  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/otoneko1102/djsk-v13.git"
@@ -33,6 +30,7 @@
   },
   "homepage": "https://github.com/otoneko1102/djsk-v13#readme",
   "dependencies": {
+    "axios": "^1.7.7",
     "child_process": "^1.0.2",
     "discord.js": "^13.17.1",
     "displus": "^2.2.1",
