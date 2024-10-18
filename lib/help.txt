@@ -1,0 +1,13 @@
+```
+# Commands
+  - %prefix%jsk help
+  > Show help.
+  - %prefix%jsk ping
+  > Pong.
+  - %prefix%jsk sh {commands}
+  > Evaluate Terminal commands.
+  - %prefix%jsk js {commands}
+  > Evaluate JavaScript commands.
+  - %prefix%jsk shutdown
+ > Shutdown.
+```

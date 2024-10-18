@@ -66,10 +66,12 @@ class Jishaku {
     this.djskInitConfig = djskInitConfig;
     this.djskInitConfig.consoleLog = typeof djskInitConfig?.consoleLog === 'boolean' ? djskInitConfig.consoleLog : true;
     const logger = new Logger("init");
-    if (this.djskInitConfig?.consoleLog) axios_1.get(`https://registry.npmjs.org/${packageData.name}`).then(npmResponse => {
+    async function checkUpdate() {
+      const npmResponse = await axios_1.get(`https://registry.npmjs.org/${packageData.name}`);
       const npmLatestVersion = npmResponse.data['dist-tags'].latest;
       if (packageData.version !== npmLatestVersion) logger.info("=====package notice=====\n", `A new version is available!\n`, `Current version: ${packageData.version}\n`, `Latest version: ${npmLatestVersion}\n`, `Update: npm i ${packageData.name}@latest\n`, "=====package notice=====");
-    });
+    }
+    if (this.djskInitConfig?.consoleLog) checkUpdate();
     if (this.djskInitConfig?.consoleLog) logger.info(`=====${packageData.name}=====\n`, "Initialization of discord.jsk is complete!\n", `=====${packageData.name}=====\n`);
   }
   async onMessageCreated(message) {
@@ -84,21 +86,8 @@ class Jishaku {
       if (!message.content?.startsWith(`${this.prefix}jsk `))
         return;
       if (message.content.startsWith(`${this.prefix}jsk help`)) {
-        const content = `
-          \`\`\`
-          # Commands
-            - ${this.prefix}jsk help
-            > Show help.
-            - ${this.prefix}jsk ping
-            > Pong.
-            - ${this.prefix}jsk sh {commands}
-            > Evaluate Terminal commands.
-            - ${this.prefix}jsk js {commands}
-            > Evaluate JavaScript commands.
-            - ${this.prefix}jsk shutdown
-            > Shutdown.
-          \`\`\`
-        `;
+        const baseContent = fs_1.readFileSync(path_1.join(__dirname, "./lib/help.txt"), "utf-8");
+        const content = baseContent.replace(/%prefix%/g, this.prefix);
         try {
           msssage.reply(content);
         } catch {}
